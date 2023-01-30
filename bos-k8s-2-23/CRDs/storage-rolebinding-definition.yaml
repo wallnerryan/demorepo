@@ -23,6 +23,6 @@ spec:
   names:
     plural: storagerolebindings
     singular: storagerolebinding
-    kind: DellStorageRoleBinding
+    kind: StorageRoleBinding
     shortNames:
     - strb
