@@ -1,0 +1,7 @@
+apiVersion: "csmauth.storage.dell.com/v1"
+kind: DellStorage
+metadata:
+  name: my-storage-role
+spec:
+  storage: "my-storage"
+  quota: "pool1=100GB"

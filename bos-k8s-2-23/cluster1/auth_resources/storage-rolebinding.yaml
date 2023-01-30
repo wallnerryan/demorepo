@@ -1,0 +1,7 @@
+apiVersion: "csmauth.storage.dell.com/v1"
+kind: DellStorage
+metadata:
+  name: my-storage-rolebinding
+spec:
+  tenant: "my-storage-tenant"
+  role: "my-storage-role"

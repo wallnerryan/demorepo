@@ -27,6 +27,12 @@ DEMO_PROMPT="${GREEN} ${CYAN}\W ${COLOR_RESET}: "
 # hide the evidence
 clear
 
+#TODO
+# create a repo for the "auth gitops"
+# put real json / yaml objects in the repo
+# update repos and in background fake that it actuall makes environment update with demo magic
+# do a few examples with p and pe.
+
 # Put your stuff here
 pe "echo 'hello world' > file.txt"
 

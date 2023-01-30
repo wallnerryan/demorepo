@@ -1,0 +1,8 @@
+apiVersion: "csmauth.storage.dell.com/v1"
+kind: DellStorage
+metadata:
+  name: my-storage
+spec:
+  type: "powerflex"
+  endpoint: "https://1.2.3.4"
+  systemid: "513ebd6347f70b0f"

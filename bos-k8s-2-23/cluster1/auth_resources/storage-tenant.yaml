@@ -1,0 +1,6 @@
+apiVersion: "csmauth.storage.dell.com/v1"
+kind: StorageTenant
+metadata:
+  name: my-storage-tenant
+spec:
+  volume-prefix: "devteam1"
