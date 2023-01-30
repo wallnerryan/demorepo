@@ -19,7 +19,7 @@ spec:
                   type: string
   scope: Cluster
   names:
-    plural: storagtenants
+    plural: storagetenants
     singular: storagetenant
     kind: StorageTenant
     shortNames:
