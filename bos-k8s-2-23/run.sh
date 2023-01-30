@@ -29,11 +29,13 @@ clear
 
 #TODO
 # makesure to apply CRDs [ ]
+  # kubectl apply -f CRDs/
 # create a repo for the "auth gitops" [DONE]
     # https://github.com/wallnerryan/demorepo/tree/main/bos-k8s-2-23/cluster1
 # put real json / yaml objects in the repo [DONE]
 # install ArgoCD, point at repo dir [ ]
 # sync auth resources (webui/cli?) [ ]
+    # equivilent of kubectl apply -f cluster1/auth_resources/
 # *demo-magic* : background issue karavictl commands [ ]
 # create postgres, pvc will fail, show logs of pvc [ ]
 # view auth resource of Role, shows only 8gb [ ]
@@ -51,8 +53,10 @@ pe "echo 'hello world' > file.txt"
 #cat the file
 pe "cat file.txt"
 
-# run command behind the scenes
+# run commands behind the scenes to cleanup
 rm -rf file.txt
+kubectl delete -f CRDs/
+kubectl delete -f cluster1/auth_resources/
 
 # show a prompt so as not to reveal our true nature after
 # the demo has concluded
