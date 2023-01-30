@@ -28,10 +28,22 @@ DEMO_PROMPT="${GREEN} ${CYAN}\W ${COLOR_RESET}: "
 clear
 
 #TODO
-# create a repo for the "auth gitops"
-# put real json / yaml objects in the repo
-# update repos and in background fake that it actuall makes environment update with demo magic
-# do a few examples with p and pe.
+# makesure to apply CRDs [ ]
+# create a repo for the "auth gitops" [DONE]
+    # https://github.com/wallnerryan/demorepo/tree/main/bos-k8s-2-23/cluster1
+# put real json / yaml objects in the repo [DONE]
+# install ArgoCD, point at repo dir [ ]
+# sync auth resources (webui/cli?) [ ]
+# *demo-magic* : background issue karavictl commands [ ]
+# create postgres, pvc will fail, show logs of pvc [ ]
+# view auth resource of Role, shows only 8gb [ ]
+    # kubectl get storagerole
+    # kubectl describe storagerole my-storage-role
+# update auth role resource role to 100GB via git commit/push [ ]
+# argo sync [ ]
+# *demo-magic* : background issue karavictl commands [ ]
+# delete and re-create app [ ]
+# app should succeed [ ]
 
 # Put your stuff here
 pe "echo 'hello world' > file.txt"
