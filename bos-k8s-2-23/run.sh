@@ -31,9 +31,17 @@ DEMO_PROMPT="${GREEN} ${CYAN}\W ${COLOR_RESET}: "
 ########################
 # setup demo env
 REPOS_BASE=${REPOS_BASE:-/home/ubuntu}
+SSHKEY=${SSHKEY-~/.ssh/id_rsa}
+TERRAFORM_DIR="aws-rhel-nodes-vpc"
+PFLEX_U="admin"
+PFLEX_P=${PFLEX_P-Password123}
+VMUSER="ec2-user"
+
+# nodes, ports and ips
 nodes_file="$REPOS_BASE/csm-quickstart/terraform/$TERRAFORM_DIR/nodes.txt"
 public_ips_array=($(grep -A1 public  $node_file | tail -1))
 IP1="${public_ips_array[0]}"
+AUTH_NODE_PORT=$(kubectl get --namespace authorization -o jsonpath="{.spec.ports[1].nodePort}" service authorization-ingress-nginx-controller)
 
 # install argocd
 kubectl create namespace argocd
@@ -43,7 +51,12 @@ kubectl patch svc argocd-server -n argocd -p '{"spec": { "type": "NodePort", "po
 kubectl patch svc argocd-server -n argocd -p '{"spec": { "type": "NodePort", "ports": [ { "name": "https", "nodePort": 30002, "port": 443 } ] } }'
 
 # makesure to apply CRDs
-kubectl create -f bos-k8s-2-23/CRDs/
+kubectl create -f CRDs/
+
+# get pflex info
+ssh -i $SSHKEY $VMUSER@$IP1 scli --login --username $PFLEX_U --password $PFLEX_P --approve_certificate
+systemid=$(ssh -i $SSHKEY $VMUSER@$IP1 scli --query_properties --object_type SYSTEM --all_objects  --properties ID)
+pflexsystemid=$(echo $systemid | awk '{print $4}')
 
 # hide the evidence
 clear
@@ -64,14 +77,14 @@ pe "argocd app sync storage-auth-app"
 # These CLI commands run in the background and make the 
 # sync action a reality of the "magic" CRDs/Objects beings shown
 # *demo-magic* : background issue karavictl commands [ ]
-karavictl role delete --insecure --addr role.csm-authorization.com:30737 \
-  --role=Tenant1Role=powerflex=51719a66586a4b0f=pool1=100GB
+karavictl role delete --insecure --addr role.csm-authorization.com:$AUTH_NODE_PORT \
+  --role=Tenant1Role=powerflex=$pflexsystemid=pool1=100GB
 
-karavictl role create --insecure --addr role.csm-authorization.com:30737 \
-  --role=Tenant1Role=powerflex=51719a66586a4b0f=pool1=8GB
+karavictl role create --insecure --addr role.csm-authorization.com:$AUTH_NODE_PORT \
+  --role=Tenant1Role=powerflex=$pflexsystemid=pool1=8GB
 
 karavictl rolebinding create --tenant Tenant1 --role Tenant1Role --insecure \
-  --addr tenant.csm-authorization.com:30737
+  --addr tenant.csm-authorization.com:$AUTH_NODE_PORT
     # Sync done via Argo WebUI (button click)
     # Sync done via CLi "$ argocd app sync external-storage-auth"
 
@@ -79,7 +92,7 @@ p "Show in Github and ArgoCD UI"
 
 # create postgres, pvc will fail, show logs of pvc
 pe "kubectl create ns pg"
-pe "kubectl -n pg create -f bos-k8s-2-23/cluster1/app/postgres-pflex.yaml"
+pe "kubectl -n pg create -f cluster1/app/postgres-pflex.yaml"
 pe "kubectl -n pg get po,pvc"
 pe "kubectl -n pg describe pvc"
 # view auth resource of Role, shows only 8gb
@@ -93,34 +106,29 @@ pe "kubectl -n pg describe pvc"
     # argo sync [ HAPPENS AUTOMATICALLY ]
 
 # *demo-magic* : background issue karavictl commands 
-karavictl role delete --insecure --addr role.csm-authorization.com:30737 \
+karavictl role delete --insecure --addr role.csm-authorization.com:$AUTH_NODE_PORT \
   --role=Tenant1Role=powerflex=51719a66586a4b0f=pool1=8GB
 
-karavictl role create --insecure --addr role.csm-authorization.com:30737 \
+karavictl role create --insecure --addr role.csm-authorization.com:$AUTH_NODE_PORT \
 --role=Tenant1Role=powerflex=51719a66586a4b0f=pool1=100GB
 
 karavictl rolebinding create --tenant Tenant1 --role Tenant1Role --insecure \
-  --addr tenant.csm-authorization.com:30737
+  --addr tenant.csm-authorization.com:$AUTH_NODE_PORT
 
 p "Submit and Merge PR in Github and show ArgoCD UI"
 
 # delete and re-create app [DONE]
-pe "kubectl -n pg delete -f bos-k8s-2-23/cluster1/app/postgres-pflex.yaml"
-pe "kubectl -n pg create -f bos-k8s-2-23/cluster1/app/postgres-pflex.yaml"
+pe "kubectl -n pg delete -f cluster1/app/postgres-pflex.yaml"
+pe "kubectl -n pg create -f cluster1/app/postgres-pflex.yaml"
 pe "kubectl -n pg get po,pvc"
 # app should succeed [DONE]
-
-# Put your stuff here
-pe "echo 'hello world' > file.txt"
-
-#cat the file
-pe "cat file.txt"
 
 # run commands behind the scenes to cleanup
 argocd app delete storage-auth-app
 kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl delete -n argocd -f argocd-cm.yaml
 kubectl delete namespace argocd
+kubectl delete -f CRDs/
 
 # show a prompt so as not to reveal our true nature after
 # the demo has concluded
