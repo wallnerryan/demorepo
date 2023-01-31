@@ -3,5 +3,5 @@ kind: StorageRoleBinding
 metadata:
   name: my-storage-rolebinding
 spec:
-  tenant: "my-storage-tenant"
-  role: "my-storage-role"
+  tenant: "Tenant1"
+  role: "Tenant1Role"

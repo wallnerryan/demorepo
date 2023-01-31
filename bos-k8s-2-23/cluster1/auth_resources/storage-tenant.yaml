@@ -3,4 +3,5 @@ kind: StorageTenant
 metadata:
   name: my-storage-tenant
 spec:
+  name: "Tenant1"
   volume-prefix: "k8s"
