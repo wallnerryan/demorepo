@@ -34,6 +34,12 @@ do
   echo "Waiting for ArgoCD"
 done
 
+password=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo)
+until argocd login $IP1:30002 --plaintext --username admin --password $password
+do
+  echo "Waiting to Login to ArgoCD"
+done
+
 # makesure to apply CRDs
 kubectl create -f CRDs/
 
@@ -73,9 +79,7 @@ clear
     # ArgoCD should be installed prior to demo
     # in the demo, get PW, login and configure new app
     # via the CLI or WebUI (comment out these lines for webui)
-password=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d && echo)
-argocd login $IP1:30002 --plaintext --username admin --password $password
-p "ArgoCDUI: http://$IP1:30002/login"
+echo "ArgoCDUI: http://$IP1:30002/login"
 pe "argocd cluster add default --in-cluster"
 pe "argocd app create storage-auth-app -f bos-k8s-2-23/cluster1/auth-app.yaml "
 pe "argocd app get storage-auth-app"
