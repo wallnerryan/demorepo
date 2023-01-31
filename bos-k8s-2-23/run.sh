@@ -19,7 +19,7 @@ export KUBECONFIG=$REPOS_BASE/csm-quickstart/terraform/$TERRAFORM_DIR/kube_confi
 
 # nodes, ports and ips
 nodes_file="$REPOS_BASE/csm-quickstart/terraform/$TERRAFORM_DIR/nodes.txt"
-public_ips_array=($(grep -A1 public  $node_file | tail -1))
+public_ips_array=($(grep -A1 public  $nodes_file | tail -1))
 IP1="${public_ips_array[0]}"
 AUTH_NODE_PORT=$(kubectl get --namespace authorization -o jsonpath="{.spec.ports[1].nodePort}" service authorization-ingress-nginx-controller)
 
@@ -29,6 +29,10 @@ kubectl create -n argocd -f argocd-cm.yaml
 kubectl create -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl patch svc argocd-server -n argocd -p '{"spec": { "type": "NodePort", "ports": [ { "name": "http", "nodePort": 30001, "port": 80 } ] } }'
 kubectl patch svc argocd-server -n argocd -p '{"spec": { "type": "NodePort", "ports": [ { "name": "https", "nodePort": 30002, "port": 443 } ] } }'
+until kubectl -n argocd get secret argocd-initial-admin-secret
+do
+  echo "Waiting for ArgoCD"
+done
 
 # makesure to apply CRDs
 kubectl create -f CRDs/
