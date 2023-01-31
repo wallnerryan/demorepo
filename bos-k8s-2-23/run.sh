@@ -1,30 +1,6 @@
 #!/bin/bash
 
 ########################
-# include the magic
-########################
-. ../tools/demo-magic.sh
-
-########################
-# Configure the options
-########################
-
-#
-# speed at which to simulate typing. bigger num = faster
-#
-# TYPE_SPEED=20
-
-#
-# custom prompt
-#
-# see http://www.tldp.org/HOWTO/Bash-Prompt-HOWTO/bash-prompt-escape-sequences.html for escape sequences
-#
-DEMO_PROMPT="${GREEN} ${CYAN}\W ${COLOR_RESET}: "
-
-# text color
-# DEMO_CMD_COLOR=$BLACK
-
-########################
 # Pre-reqs
 # - csm-quickstart cluster 
 #   with CSM auth installed
@@ -57,6 +33,30 @@ kubectl create -f CRDs/
 ssh -i $SSHKEY $VMUSER@$IP1 scli --login --username $PFLEX_U --password $PFLEX_P --approve_certificate
 systemid=$(ssh -i $SSHKEY $VMUSER@$IP1 scli --query_properties --object_type SYSTEM --all_objects  --properties ID)
 pflexsystemid=$(echo $systemid | awk '{print $4}')
+
+########################
+# include the magic
+########################
+. ../tools/demo-magic.sh
+
+########################
+# Configure the options
+########################
+
+#
+# speed at which to simulate typing. bigger num = faster
+#
+# TYPE_SPEED=20
+
+#
+# custom prompt
+#
+# see http://www.tldp.org/HOWTO/Bash-Prompt-HOWTO/bash-prompt-escape-sequences.html for escape sequences
+#
+DEMO_PROMPT="${GREEN} ${CYAN}\W ${COLOR_RESET}: "
+
+# text color
+# DEMO_CMD_COLOR=$BLACK
 
 # hide the evidence
 clear
