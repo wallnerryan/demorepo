@@ -4,4 +4,4 @@ metadata:
   name: my-storage-role
 spec:
   storage: "my-storage"
-  quota: "pool1=8GB"
+  quota: "pool1=100GB"
