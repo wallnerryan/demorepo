@@ -5,4 +5,4 @@ metadata:
 spec:
   name: "Tenant1Role"
   storage: "my-storage"
-  quota: "pool1=100GB"
+  quota: "pool1=8GB"
