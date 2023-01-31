@@ -133,8 +133,8 @@ pe "kubectl -n pg get po,pvc"
 
 # run commands behind the scenes to cleanup
 argocd app delete storage-auth-app
-kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl delete -n argocd -f argocd-cm.yaml
+kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl delete namespace argocd
 kubectl delete -f CRDs/
 
