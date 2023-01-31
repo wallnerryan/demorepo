@@ -1,0 +1,12 @@
+project: default
+source:
+repoURL: 'https://github.com/wallnerryan/demorepo'
+path: bos-k8s-2-23/cluster1/auth_resources
+targetRevision: HEAD
+destination:
+server: 'https://kubernetes.default.svc'
+namespace: authorization
+syncPolicy:
+automated:
+    prune: true
+    selfHeal: true
