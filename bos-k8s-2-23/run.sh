@@ -55,8 +55,8 @@ pe "cat file.txt"
 
 # run commands behind the scenes to cleanup
 rm -rf file.txt
-kubectl delete -f CRDs/
 kubectl delete -f cluster1/auth_resources/
+kubectl delete -f CRDs/
 
 # show a prompt so as not to reveal our true nature after
 # the demo has concluded

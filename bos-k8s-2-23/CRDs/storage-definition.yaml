@@ -21,6 +21,8 @@ spec:
                   type: string
                 systemid:
                   type: string
+                credential:
+                  type: string
   scope: Cluster
   names:
     plural: dellstorages
