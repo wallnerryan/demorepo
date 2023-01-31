@@ -108,10 +108,9 @@ pe "kubectl -n pg create -f cluster1/app/postgres-pflex.yaml"
 pe "kubectl -n pg get po,pvc"
 pe "kubectl -n pg describe pvc"
 # view auth resource of Role, shows only 8gb
-    # view in ArgoCD UI 
-    # or
-    # kubectl get storagerole
-    # kubectl describe storagerole my-storage-role
+    # can also view in ArgoCD UI 
+pe "kubectl get DellStorage,StorageRole"
+pe "kubectl get storagerole my-storage-role -o yaml"
 
 # update auth role resource role to 100GB via git commit/push
     # do this as a PR from Github.com
