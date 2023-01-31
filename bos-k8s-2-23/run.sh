@@ -83,7 +83,7 @@ echo "ArgoCD UI: http://$IP1:30002/login password: $password"
 pe " argocd cluster add local --in-cluster -y"
 pe "argocd app create storage-auth-app -f cluster1/auth-app.yaml "
 pe "argocd app get storage-auth-app"
-pe "argocd app sync storage-auth-app"
+# pe "argocd app sync storage-auth-app" #(not needed, app syncs automatically)
 
 # sync auth resources (webui/cli?)
 # These CLI commands run in the background and make the 
@@ -100,7 +100,7 @@ karavictl rolebinding create --tenant Tenant1 --role Tenant1Role --insecure \
     # Sync done via Argo WebUI (button click)
     # Sync done via CLi "$ argocd app sync external-storage-auth"
 
-p "Show in Github and ArgoCD UI"
+echo "Let's create an app"
 
 # create postgres, pvc will fail, show logs of pvc
 pe "kubectl create ns pg"
@@ -127,7 +127,7 @@ karavictl role create --insecure --addr role.csm-authorization.com:$AUTH_NODE_PO
 karavictl rolebinding create --tenant Tenant1 --role Tenant1Role --insecure \
   --addr tenant.csm-authorization.com:$AUTH_NODE_PORT
 
-p "Submit and Merge PR in Github and show ArgoCD UI"
+echo "Submit and Merge PR to increase quota in Github"
 
 # delete and re-create app [DONE]
 pe "kubectl -n pg delete -f cluster1/app/postgres-pflex.yaml"
@@ -139,6 +139,8 @@ p ""
 
 # run commands behind the scenes to cleanup
 echo "....cleanup"
+kubectl -n pg delete -f cluster1/app/postgres-pflex.yaml
+kubectl delete ns pg
 argocd cluster rm local -y
 argocd app delete storage-auth-app -y
 kubectl delete -n argocd -f argocd-cm.yaml
