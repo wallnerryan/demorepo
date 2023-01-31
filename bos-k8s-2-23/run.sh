@@ -20,6 +20,8 @@ IP1="${public_ips_array[0]}"
 AUTH_NODE_PORT=$(kubectl get --namespace authorization -o jsonpath="{.spec.ports[1].nodePort}" service authorization-ingress-nginx-controller)
 
 # install argocd
+unset KUBECONFIG
+export KUBECONFIG=$REPOS_BASE/csm-quickstart/terraform/$TERRAFORM_DIR/kube_config_rke-3-hosts.yml
 kubectl create namespace argocd
 kubectl create -n argocd -f argocd-cm.yaml
 kubectl create -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
