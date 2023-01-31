@@ -80,7 +80,7 @@ clear
     # in the demo, get PW, login and configure new app
     # via the CLI or WebUI (comment out these lines for webui)
 echo "ArgoCD UI: http://$IP1:30002/login password: $password" 
-pe "argocd cluster add default --in-cluster"
+pe " argocd cluster add local --in-cluster -y"
 pe "argocd app create storage-auth-app -f cluster1/auth-app.yaml "
 pe "argocd app get storage-auth-app"
 pe "argocd app sync storage-auth-app"
@@ -136,7 +136,8 @@ pe "kubectl -n pg get po,pvc"
 # app should succeed [DONE]
 
 # run commands behind the scenes to cleanup
-argocd app delete storage-auth-app
+argocd cluster rm local -y
+argocd app delete storage-auth-app -y
 kubectl delete -n argocd -f argocd-cm.yaml
 kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 kubectl delete namespace argocd
