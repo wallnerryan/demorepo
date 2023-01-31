@@ -79,9 +79,9 @@ clear
     # ArgoCD should be installed prior to demo
     # in the demo, get PW, login and configure new app
     # via the CLI or WebUI (comment out these lines for webui)
-echo "ArgoCDUI: http://$IP1:30002/login"
+echo "ArgoCD UI: http://$IP1:30002/login password: $password" 
 pe "argocd cluster add default --in-cluster"
-pe "argocd app create storage-auth-app -f bos-k8s-2-23/cluster1/auth-app.yaml "
+pe "argocd app create storage-auth-app -f cluster1/auth-app.yaml "
 pe "argocd app get storage-auth-app"
 pe "argocd app sync storage-auth-app"
 
