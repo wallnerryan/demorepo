@@ -4,6 +4,6 @@ metadata:
   name: my-storage
 spec:
   type: "powerflex"
-  endpoint: "https://1.2.3.4"
+  endpoint: "https://10.0.12.56"
   systemid: "513ebd6347f70b0f"
   credential: "pflex-auth"
