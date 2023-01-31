@@ -135,7 +135,10 @@ pe "kubectl -n pg create -f cluster1/app/postgres-pflex.yaml"
 pe "kubectl -n pg get po,pvc"
 # app should succeed [DONE]
 
+p ""
+
 # run commands behind the scenes to cleanup
+echo "....cleanup"
 argocd cluster rm local -y
 argocd app delete storage-auth-app -y
 kubectl delete -n argocd -f argocd-cm.yaml
