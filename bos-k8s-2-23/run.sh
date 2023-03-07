@@ -118,10 +118,10 @@ pe "kubectl get storagerole my-storage-role -o yaml"
 
 # *demo-magic* : background issue karavictl commands 
 karavictl role delete --insecure --addr role.csm-authorization.com:$AUTH_NODE_PORT \
-  --role=Tenant1Role=powerflex=51719a66586a4b0f=pool1=8GB
+  --role=Tenant1Role=powerflex=$pflexsystemid=pool1=8GB
 
 karavictl role create --insecure --addr role.csm-authorization.com:$AUTH_NODE_PORT \
---role=Tenant1Role=powerflex=51719a66586a4b0f=pool1=100GB
+--role=Tenant1Role=powerflex=$pflexsystemid=pool1=100GB
 
 karavictl rolebinding create --tenant Tenant1 --role Tenant1Role --insecure \
   --addr tenant.csm-authorization.com:$AUTH_NODE_PORT
