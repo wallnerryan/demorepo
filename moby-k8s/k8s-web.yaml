@@ -1,0 +1,49 @@
+# DEMO APP
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-counter-deployment
+  labels:
+    app: k8s-counter
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: k8s-counter
+  template:
+    metadata:
+      labels:
+        app: k8s-counter
+    spec:
+      containers:
+      - name: k8s-counter
+        image: wallnerryan/moby-counter:v1.21
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: USE_POSTGRES_HOST
+          value: "pg-service" #Update to your PG Host
+        - name: USE_POSTGRES_PORT
+          value: "5432" #Update to your PG Port
+        - name: POSTGRES_USER
+          value: "postgres" #Update to your PG User
+        - name: POSTGRES_PASSWORD # TODO: use secret for password
+          value: "admin123" #Update to your PG Password
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-counter-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: k8s-counter
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 30123
+    name: k8s-counter-web
