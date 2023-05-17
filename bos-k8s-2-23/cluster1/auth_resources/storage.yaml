@@ -5,5 +5,5 @@ metadata:
 spec:
   type: "powerflex"
   endpoint: "https://10.0.12.56"
-  systemid: "513ebd6347f70b0f"
+  systemid: "<insert>"
   credential: "pflex-auth"
