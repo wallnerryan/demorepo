@@ -6,4 +6,4 @@ spec:
   type: "powerflex"
   endpoint: "https://10.0.12.56"
   systemid: "<insert>"
-  credential: "pflex-auth"
+  credential: "<insert>"
